@@ -1,0 +1,58 @@
+
+rm(list = ls())
+library(readxl)
+library(readr)
+library(stringr)
+library(magrittr)
+library(RColorBrewer)
+
+df <- read.delim("D:/4data analysis/TPD/volcano_190131/data/AC10_20190115.txt", stringsAsFactors=FALSE)
+
+df1 = t(df[,-1]) %>% data.frame(row.names = names(df)[-1])
+
+label = df$label
+table(df$label) # A143,C75
+
+na_ration_all <- sum(is.na(df1))/dim(df1)[1]/dim(df1)[2]
+paste0("The NA ratio is: ", format(100*na_ration_all, digits = 2), "%")
+
+
+# 计算fc时，先不考虑NA，有多少值算多少的均值
+# df1[df1 == 1] <- NA
+fc <- apply(2^df1, 1, function(x) {
+  log2(mean(na.omit(x[label == "A"])) / mean(na.omit(x[label == "C"])))})
+
+df1[is.na(df1)] <- 1
+p <- apply(df1, 1, function(x) {
+  t.test(x[label == "A"], x[label == "C"], paired = F, var.equal = F)$p.value}) %>%
+  p.adjust(method="BH")
+
+pdf("Figure_1_TPD_AC10_fc1.5_190131.pdf")
+plot(fc, -log10(p), col = "#00000033", pch = 19,
+     main = "Volcano_AC10",
+     xlab = "log2 FC", ylab = "-log10 p value")
+abline(h = 1.3, v = c(-log2(1.5),log2(1.5)), lty = 2, lwd = 1)
+up <- fc >= log2(1.5) & p <= 0.05
+points(fc[up], -log10(p[up]), col = 1,
+       bg = brewer.pal(9,"YlOrRd")[6], pch = 21, cex = 2)
+down <- fc <= -log2(1.5) & p <= 0.05
+points(fc[down], -log10(p[down]), col = 1,
+       bg = brewer.pal(11,"RdBu")[9], pch = 21, cex = 2)
+dev.off()
+
+name = list(up = data.frame(prot = row.names(df1)[up],
+                            fc = fc[up],
+                            p_value = p[up],
+                            type = rep("Upregulation",sum(up))),
+            down = data.frame(prot = row.names(df1)[down],
+                              fc = fc[down],
+                              p_value = p[down],
+                              type = rep("Downregulation",sum(down))))
+name1 = rbind(name[[1]],name[[2]])
+library(xlsx)
+write.xlsx(name1, "Table_1_TPD_volcano_prot_AC10_fc1.5_190131.xlsx",showNA = T,
+           row.names = F)
+sum(up)
+sum(down)
+
+
