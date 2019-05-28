@@ -2,7 +2,7 @@ rm(list=ls())
 library(data.table)
 
 
-setwd('F:/WIAS/LTP')
+setwd('E:/WIAS/LTP')
 df0 <- read.csv("data/LTP_protMat_20190413.csv",header = T,stringsAsFactors = F)
 tmp <- data.frame(t(df0[,-c(1,2)]))
 colnames(tmp) <- df0$prot
@@ -21,7 +21,7 @@ lbls    <- substr(rownames(matPool),1,1)
 matPool$label <- lbls
 matPool <- matPool[,c('label',protIds)]
 
-#write.table(matPool,file="data/matPool.txt",sep="\t",col.names=T,row.names=T,quote=F)
+write.table(matPool,file="data/matPool.txt",sep="\t",col.names=T,row.names=T,quote=F)
 
 ###############################################################
 matProt <- tmp[!grepl('_pool',rownames(tmp)),]
@@ -45,4 +45,4 @@ protIds  <- colnames(k0)
 k0$label <- subtypes[rownames(k0),'PType']
 k0 <- k0[,c('label',protIds)]
 
-#write.table(k0,file='data/LTP_protMat_avg_20190526.txt',sep="\t",col.names=T,row.names=T,quote=F)
+write.table(k0,file='data/LTP_protMat_avg_20190526.txt',sep="\t",col.names=T,row.names=T,quote=F)

@@ -1,0 +1,28 @@
+---
+title: "艾米森生命科技有限公司工作报告"
+author: "生物信息组"
+date: "`r Sys.Date()`"
+documentclass: ctexart
+geometry: margin=1cm
+fontsize: 18pt
+output: rticles::ctex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+```{r tableExample,echo=FALSE}
+knitr::kable(T3,caption = "结直肠癌各部位样本数量")
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
