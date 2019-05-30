@@ -109,7 +109,6 @@ if(T){
 	        str1=readLines("http://dispatcher:8080/task/new",warn=FALSE)
 			  if(str1!='NONE'){
 				  rate=as.integer(str1)
-
 					seed=as.integer(readLines("http://dispatcher:8080/seed/new",warn=FALSE))
 					set.seed(seed)
 					print(sprintf("rate=%d",rate))

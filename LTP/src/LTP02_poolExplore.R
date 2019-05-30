@@ -2,6 +2,7 @@ rm(list=ls())
 library(data.table)
 library(sqldf)
 
+setwd('F:/WIAS/LTP')
 
 source("src/common.R")
 
@@ -19,8 +20,8 @@ ump7 <- drawUMAP(df0[,R0<=1],color2,strTitle=sprintf("UMAP7:%d proteins of LTP",
 
 
 dat1 <- ump1$data
-batchA <- as.character(sapply(rownames(dat1)[dat$X > -1],function(v){strsplit(v,"_")[[1]][2]}))
-batchB <- as.character(sapply(rownames(dat1)[dat$X < -1],function(v){strsplit(v,"_")[[1]][2]}))
+batchA <- as.character(sapply(rownames(dat1)[dat1$X > -1],function(v){strsplit(v,"_")[[1]][2]}))
+batchB <- as.character(sapply(rownames(dat1)[dat1$X < -1],function(v){strsplit(v,"_")[[1]][2]}))
 
 df1 <- read.csv("data/LTP_protMat_20190413.csv",header = T,stringsAsFactors = F)
 tmp <- data.frame(t(df1[,-c(1,2)]))
@@ -62,8 +63,8 @@ getDataSet <- function(batchIds){
 matA <- getDataSet(batchA)
 matB <- getDataSet(batchB)
 
-#write.table(matA,file='data/matA.txt',sep="\t",col.names=T,row.names=T,quote=F)
-#write.table(matB,file='data/matA.txt',sep="\t",col.names=T,row.names=T,quote=F)
+write.table(matA,file='data/matA.txt',sep="\t",col.names=T,row.names=T,quote=F)
+write.table(matB,file='data/matB.txt',sep="\t",col.names=T,row.names=T,quote=F)
 
 benign <- c('B','Q','P')
 malign <- c('C','S','M','G')

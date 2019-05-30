@@ -21,6 +21,36 @@ generateSamples <- function(M0,mixDegree=0.1,size=500){
 		  t0 <- data.frame(t(t0))
 		  rownames(t0) <- paste0(nm,1:dim(t0)[1])
 	}
+}
 
+###########################################
+glmIterate <- function(TM){
+     	Y0 <- as.factor(TM$label)
+    if(F){
+		hitFit <- NULL
+		fits   <- list()
+		flg=T
+		selected   <- c()
+		selection0 <- colnames(TM)[colnames(TM) != 'label']
+      while(flg){
+		  if(length(selection0) >=3){
+				tmp0   <- scaleRow(TM[,selection0])
+				cvfit  <- cv.glmnet(as.matrix(tmp0),Y0,family='binomial',alpha=1,type.measure='class')
+				cf <- coef(cvfit,s='lambda.1se')
+				selection1 <- rownames(cf)[cf[,1]!=0][-1]
+				selected <- rbind(selected,paste0(selection1,collapse=","))
+				flg <- length(selection1)!=length(selection0)
+				selection0 <- selection1
+            print(sprintf("%d proteins selected",length(selection0)))
+			}else{flg <- F}
+	   }
+		
+		  #return(data.frame(selected,stringsAsFactors=F))
+		}
 
+		###########################
+		cvfit  <- cv.glmnet(as.matrix(TM[,colnames(TM) !='label'],Y0,family='binomial',alpha=1,type.measure='class'))
+		cf <- coef(cvfit,s='lambda.1se')
+		selection1 <- rownames(cf)[cf[,1]!=0][-1]
+		return(paste0(paste0(selection1,collapse=",")))
 }
