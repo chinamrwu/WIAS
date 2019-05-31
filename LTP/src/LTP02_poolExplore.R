@@ -2,6 +2,7 @@ rm(list=ls())
 library(data.table)
 library(sqldf)
 
+setwd('F:/WIAS/LTP')
 
 source("src/common.R")
 

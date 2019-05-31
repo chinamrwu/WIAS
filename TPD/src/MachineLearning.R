@@ -154,10 +154,10 @@ glmFeatures <- function(TM,VM,VM2=NULL){
 		selected   <- c()
 		selection0 <- colnames(TM)[colnames(TM) != 'label']
       while(flg){
-		  if(length(selection0) >=3){
+		  if(length(selection0) >=3 ) {
 				tmp0   <- scaleRow(TM[,selection0])
 				cvfit  <- cv.glmnet(as.matrix(tmp0),Y0,family='binomial',alpha=1,type.measure='class')
-				cf <- coef(cvfit,s='lambda.1se')
+				cf     <- coef(cvfit,s='lambda.1se')
 				selection1 <- rownames(cf)[cf[,1]!=0][-1]
 
             if(length(selection1) >=3){
@@ -172,9 +172,9 @@ glmFeatures <- function(TM,VM,VM2=NULL){
                strShow <- sprintf("%d selected:%4.3f %4.3f %4.3f-%4.3f %4.3f",length(selection1),acc[1],acc[2],acc[3],PPV,NPV)
 
 					if(!is.null(VM2)){
-							Y2    <- VM2$label
+							Y2     <- VM2$label
 							tmp2   <- scaleRow(VM2[,selection1])
-							pred1   <- data.frame(predict(model,newx = as.matrix(tmp2),s = model$lambda.1se,type='class'))
+							pred1  <- data.frame(predict(model,newx = as.matrix(tmp2),s = model$lambda.1se,type='class'))
 							acc1 <- as.numeric(sapply(levels(as.factor(Y2)),function(ch){sum(pred1[which(Y2==ch),1]==ch)/sum(Y2==ch)}))
 							acc1 <- round(100*c(sum(pred1==Y2)/dim(VM2)[1],acc1),digits=3)
 							if(acc[1]>80 & acc[2]>80 & acc[3]>80 & acc[4]>80 & acc[5] >80 & acc[6] >80 & length(selection1)<=20){ 
