@@ -3,7 +3,7 @@ library(ggplot2)
 library(caret)
 library(umap)
 
-setwd("E:/projects/TPD")
+setwd("F:/WIAS/TPD")
 source("src/common.R")
 set.seed(190311)
 pool <- read.csv('data/TPD_SG579_116poolProt_matrix_190304.csv',header=T,stringsAsFactors = F)

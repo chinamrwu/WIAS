@@ -3,7 +3,7 @@ library(ggplot2)
 library(caret)
 library(umap)
 library(sqldf)
-setwd("F:/projects/TPD")
+setwd("F:/WIAS/TPD")
 source("src/common.R")
 set.seed(190311)
 pool <- read.csv('data/TPD_SG579_116poolProt_matrix_190304.csv',header=T,stringsAsFactors = F)
@@ -60,7 +60,7 @@ color3=c(A="red",B="black",C="blue")
 color2=c(M='red',B='blue')
 ############################################################################################################
 R0 <- apply(pool,2,function(v){sum(is.na(v))/length(v)*100})
-ump <- drawUMAP(pool[,R0 <=10],color3,strTitle=sprintf("UMAP:pool samples with %d missing rate",k),rowNormalization=T,colNormalization=T)
+ump <- drawUMAP(pool[,R0 <=10],color3,strTitle=sprintf("UMAP:pool samples with %d missing rate",10),rowNormalization=T,colNormalization=T)
 ump <- ump + scale_x_continuous(breaks = round(seq(min(ump$data$X), max(ump$data$X), by = 0.5),1))+ 
      scale_y_continuous(breaks = round(seq(min(ump$data$Y), max(ump$data$Y), by = 0.5),1)) 
 dat <- ump$data
